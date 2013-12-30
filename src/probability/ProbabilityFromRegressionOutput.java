@@ -6,6 +6,7 @@ package probability;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -21,15 +22,17 @@ public class ProbabilityFromRegressionOutput {
 	 */
 	public static void main(String[] args) throws IOException {
 		System.out.println(System.getProperty("user.dir"));
-		ProbabilityFromRegressionOutput("./src/SASRegressionExample.csv", 110,
-				301, 1, 5);
+		TestAgent ta = new TestAgent();
+
+		ProbabilityFromRegressionOutput(ta, "./src/SASRegressionExample.csv",
+				4, 122, 1, 5);
 
 	}
 
 	/**
-	 * takes in a file (csv), line start, line end, row start and row end of
-	 * where variables and parameter estimates for regression
 	 * 
+	 * @param agent
+	 *            when used in an agent-based model, this is the agent object
 	 * @param file
 	 *            file directory of where parameter estimate table is
 	 * @param rowStart
@@ -45,13 +48,15 @@ public class ProbabilityFromRegressionOutput {
 	 * @author dchen
 	 * 
 	 */
-	public static void ProbabilityFromRegressionOutput(String file,
+	public static void ProbabilityFromRegressionOutput(TestAgent ta, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
 		/*
 		 * List of beta estimates, including b_0, the intercept
 		 */
 		CSVReader reader = new CSVReader(new FileReader(file));
+		Hashtable hashtable = new Hashtable();
+
 		String[] nextLine;
 		int i = 0;
 		// int start = 5;
@@ -62,15 +67,58 @@ public class ProbabilityFromRegressionOutput {
 			if ((i > (rowStart - 2)) && (i < rowEnd)) {
 				// nextLine[] is an array of values from the line
 
-				String str = Arrays.toString(nextLine);
-				System.out.println(str);
-				// nextLine.split(",");
-				// System.out.println(nextLine.length);
-				// System.out.println(nextLine.split(","));
+//				String str = Arrays.toString(nextLine);
+//				System.out.println(str);
+//				System.out.println(nextLine[0]);
+
+				StatsOutput statsOutput = new StatsOutput();
+				statsOutput.setParameter(nextLine[0]);
+				if (nextLine[1].trim().length() > 0) {
+					statsOutput.setP1(Integer.parseInt(nextLine[1]));
+				}
+				if (nextLine[2].trim().length() > 0) {
+					statsOutput.setP2(Integer.parseInt(nextLine[2]));
+				}
+
+				statsOutput.setEstimate(Double.parseDouble(nextLine[4]));
+
+				hashtable.put(nextLine[0] + nextLine[1] + nextLine[2],
+						statsOutput);
 
 			}
 			i++;
 		}
+		
+		Double logitP = 0.0;
 
+		if (hashtable.containsKey("Intercept")) {
+			logitP += ((StatsOutput) hashtable.get("Intercept")).getEstimate();
+			System.out.println(logitP);
+			
+		}
+		
+		int age = ta.getAgecat();
+		String agestring = "agecat"+Integer.toString(age);
+		if (hashtable.containsKey(agestring)) {
+			logitP += ((StatsOutput) hashtable.get(agestring)).getEstimate();
+			System.out.println(logitP);
+		}
+		
+		int race = ta.getRacecat();
+		String racestring = "race4"+Integer.toString(race);
+		if (hashtable.containsKey(racestring)) {
+			logitP += ((StatsOutput) hashtable.get(racestring)).getEstimate();
+			System.out.println(logitP);
+		}
+
+		String ageracestring = "agecat*race4"+Integer.toString(age)+Integer.toString(race);
+		if (hashtable.containsKey(ageracestring)) {
+			logitP += ((StatsOutput) hashtable.get(ageracestring)).getEstimate();
+			System.out.println(logitP);
+		}
+		double probability = Math.exp(logitP)/(1 + Math.exp(logitP));
+		
+		System.out.println(probability);
+		
 	}
 }
