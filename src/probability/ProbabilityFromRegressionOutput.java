@@ -90,35 +90,45 @@ public class ProbabilityFromRegressionOutput {
 		}
 		
 		Double logitP = 0.0;
+		Double value = 0.0;
 
 		if (hashtable.containsKey("Intercept")) {
-			logitP += ((StatsOutput) hashtable.get("Intercept")).getEstimate();
+			value = ((StatsOutput) hashtable.get("Intercept")).getEstimate();
+			logitP += value;
+			System.out.println("value: " + value);
 			System.out.println(logitP);
 			
 		}
 		
-		int age = ta.getAgecat();
+		int age = ta.getAgeCat();
 		String agestring = "agecat"+Integer.toString(age);
 		if (hashtable.containsKey(agestring)) {
-			logitP += ((StatsOutput) hashtable.get(agestring)).getEstimate();
+			value = ((StatsOutput) hashtable.get(agestring)).getEstimate();
+			logitP += value;
+			System.out.println("value: " + value);
 			System.out.println(logitP);
 		}
 		
-		int race = ta.getRacecat();
+		int race = ta.getRace();
 		String racestring = "race4"+Integer.toString(race);
 		if (hashtable.containsKey(racestring)) {
-			logitP += ((StatsOutput) hashtable.get(racestring)).getEstimate();
+			value = ((StatsOutput) hashtable.get(racestring)).getEstimate();
+			logitP += value;
+			System.out.println("value: " + value);
 			System.out.println(logitP);
 		}
 
 		String ageracestring = "agecat*race4"+Integer.toString(age)+Integer.toString(race);
 		if (hashtable.containsKey(ageracestring)) {
-			logitP += ((StatsOutput) hashtable.get(ageracestring)).getEstimate();
+			value = ((StatsOutput) hashtable.get(ageracestring)).getEstimate();
+			logitP += value;
+			System.out.println("value: " + value);
 			System.out.println(logitP);
 		}
 		double probability = Math.exp(logitP)/(1 + Math.exp(logitP));
 		
-		System.out.println(probability);
+		System.out.println("logit = " + logitP);
+		System.out.println("probability = " + probability);
 		
 	}
 }
