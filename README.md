@@ -1,4 +1,5 @@
-java-stats-helper
+java-regression-pcalculator
 =================
 
-Useful statistics helper functions
+Logistic Regression:
+takes in a csv of variable names, and their corresponding beta estimates to calculate a probability
