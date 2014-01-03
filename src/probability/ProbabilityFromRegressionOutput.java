@@ -51,7 +51,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @throws IOException
 	 * 
 	 */
-	public ProbabilityFromRegressionOutput(Object agent,
+	public ProbabilityFromRegressionOutput(Agent agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
@@ -72,7 +72,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @param colEnd
 	 * @throws IOException
 	 */
-	private static void genericCodedLookups (Object agent,
+	private static void genericCodedLookups (Agent agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
@@ -186,8 +186,8 @@ public class ProbabilityFromRegressionOutput {
 				String agentVariable2 = variableSynonym.get(interaction[1]).toString().trim();
 				System.out.println("interaction variable conversion: " + agentVariable1 + " " + agentVariable2);
 				
-				int categoricalInt1 = ((TestAgent) agent).getValue(agentVariable1);
-				int categoricalInt2 = ((TestAgent) agent).getValue(agentVariable2);
+				int categoricalInt1 = ((Agent) agent).getIntValue(agentVariable1);
+				int categoricalInt2 = ((Agent) agent).getIntValue(agentVariable2);
 				
 				String interactionString = interaction[0]+"*"+interaction[1]+Integer.toString(categoricalInt1)+Integer.toString(categoricalInt2);
 				System.out.println("catints:" + categoricalInt1 + categoricalInt2 + " " + 
@@ -212,7 +212,7 @@ public class ProbabilityFromRegressionOutput {
 				// categorical variable
 				// convert variable in stats output into variable used for agent
 				String agentVariable = variableSynonym.get(statsVariable).toString().trim();
-				int categoricalInt = ((TestAgent) agent).getValue(agentVariable);
+				int categoricalInt = ((Agent) agent).getIntValue(agentVariable);
 				String categoricalString = statsVariable+Integer.toString(categoricalInt);
 				
 
@@ -253,7 +253,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @deprecated Replaced by {@link #genericCodedLookups()
 	 */
 	@Deprecated
-	private static void hardCodedLookups (TestAgent ta,
+	private static void hardCodedLookups (Agent ta,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
