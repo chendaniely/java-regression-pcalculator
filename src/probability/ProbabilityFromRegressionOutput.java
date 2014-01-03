@@ -20,6 +20,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		// print current working directory
 		System.out.println(System.getProperty("user.dir"));
 		TestAgent ta = new TestAgent();
 		
@@ -34,25 +35,21 @@ public class ProbabilityFromRegressionOutput {
 	/**
 	 * 
 	 * @param agent
-	 *            object: when used in an agent-based model, this is the agent
-	 *            object
+	 *            object: when used in an agent-based model, this is the agent object
 	 * @param variables
 	 *            array: variables to be read from the csv file
 	 * @param file
 	 *            string: file directory of where parameter estimate table is
 	 * @param rowStart
-	 *            int: row where to start looking for parameter variables and
-	 *            beta estimates
+	 *            int: row where to start looking for parameter variables and beta estimates
 	 * @param rowEnd
-	 *            int: row where to stop looking for parameter variables and
-	 *            beta estimates
+	 *            int: row where to stop looking for parameter variables and beta estimates
 	 * @param colStart
 	 *            int: column where variables are
 	 * @param colEnd
-	 *            int: column where to stop reading (where the parameter
-	 *            estimates are)
+	 *            int: column where to stop reading (where the parameter estimates are)
 	 * @throws IOException
-	 * @author dchen
+	 * @author dchen chendaniely
 	 * 
 	 */
 	public static void ProbabilityFromRegressionOutput(TestAgent ta,
@@ -138,7 +135,7 @@ public class ProbabilityFromRegressionOutput {
 		
 //		System.out.println("read in variable synonym csv");
 //		
-//		System.out.println("skkipped first line");
+//		System.out.println("skipped first line");
 		while ((nextVariableLine = variableSynonymCSV.readNext()) != null) {
 
 			
@@ -169,7 +166,7 @@ public class ProbabilityFromRegressionOutput {
 				logitP += value;
 				System.out.println("Intercept value: " + value);
 				System.out.println("current logitP value = " + logitP);
-				System.out.println(" ~~~~~ ");
+//				System.out.println("~~~~~ ");
 
 			}
 			
@@ -186,7 +183,7 @@ public class ProbabilityFromRegressionOutput {
 			// interaction is checked first otherwise the following line used
 			// for categorical variable will throw an error
 			// String agentVariable = variableSynonym.get(statsVariable).toString().trim();
-			System.out.println(statsVariable);
+			System.out.println("~~~~~ Variable Encountered: " + statsVariable);
 			if (statsVariable.contains("*")){
 				System.out.println("~~~~~ in the interaction variable if statment ~~~~~");
 				String[] interaction = statsVariable.split("\\*");
@@ -199,6 +196,27 @@ public class ProbabilityFromRegressionOutput {
 				String agentVariable1 = variableSynonym.get(interaction[0]).toString().trim();
 				String agentVariable2 = variableSynonym.get(interaction[1]).toString().trim();
 				System.out.println("interaction variable conversion: " + agentVariable1 + " " + agentVariable2);
+				
+				int categoricalInt1 = ta.getValue(agentVariable1);
+				int categoricalInt2 = ta.getValue(agentVariable2);
+				
+				String interactionString = interaction[0]+"*"+interaction[1]+Integer.toString(categoricalInt1)+Integer.toString(categoricalInt2);
+				System.out.println("catints:" + categoricalInt1 + categoricalInt2 + " " + 
+						"interactionString:" + interactionString + " " + 
+						"agentVariables:" + agentVariable1 + agentVariable2 + " " +
+						"statsVariables:" + interaction[0] + interaction[1]);
+				
+				if (hashtable.containsKey(interactionString)) {
+					System.out.println("!!!!! in the interaction variable if statement !!!!!");
+					value = ((StatsOutput) hashtable.get(interactionString)).getEstimate();
+					System.out.println("hashtable key: " + value);
+					
+					
+					System.out.println("old logitP value = " + logitP);
+					logitP += value;
+					System.out.println("value: " + value);
+					System.out.println("new logitP value = " + logitP);
+				}
 				
 			} else {
 				
@@ -215,7 +233,7 @@ public class ProbabilityFromRegressionOutput {
 				
 				
 				if (hashtable.containsKey(categoricalString)) {
-					System.out.println("~~~~~ in the cat variable if statement ~~~~~");
+//					System.out.println("~~~~~ in the cat variable if statement ~~~~~");
 					value = ((StatsOutput) hashtable.get(categoricalString)).getEstimate();
 					System.out.println("hashtable key: " + value);
 					
@@ -248,6 +266,11 @@ public class ProbabilityFromRegressionOutput {
 			}
 
 		}
+		
+		double probability = Math.exp(logitP)/(1 + Math.exp(logitP));
+		System.out.println("FINAL CALCULATIONS:");
+		System.out.println("logit = " + logitP);
+		System.out.println("probability = " + probability);
 	}
 	
 	/**
