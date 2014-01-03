@@ -28,6 +28,8 @@ public class TestClass {
 		ProbabilityFromRegressionOutput p = new ProbabilityFromRegressionOutput(agent, variables,
 				"./src/alternativeVariableNames.csv",
 				"./src/SASRegressionExample.csv", 4, 122, 1, 5);
+		
+		System.out.println(p.getProbabilityFromBetas());
 
 	}
 

@@ -51,13 +51,16 @@ public class ProbabilityFromRegressionOutput {
 	 * @throws IOException
 	 * 
 	 */
+	
+	private double probabilityFromBetas = 0.0;
+	
 	public ProbabilityFromRegressionOutput(Agent agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
 		
 //		hardCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
-		genericCodedLookups(agent, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
+		probabilityFromBetas = genericCodedLookups(agent, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
 		
 	}
 	/**
@@ -70,9 +73,10 @@ public class ProbabilityFromRegressionOutput {
 	 * @param rowEnd
 	 * @param colStart
 	 * @param colEnd
+	 * @return 
 	 * @throws IOException
 	 */
-	private static void genericCodedLookups (Agent agent,
+	private double genericCodedLookups (Agent agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
@@ -237,6 +241,8 @@ public class ProbabilityFromRegressionOutput {
 		System.out.println("FINAL CALCULATIONS:");
 		System.out.println("logit = " + logitP);
 		System.out.println("probability = " + probability);
+		
+		return probability;
 	}
 	
 	/**
@@ -348,4 +354,13 @@ public class ProbabilityFromRegressionOutput {
 		
 		System.out.println("\n ---------- \n");
 	}
+
+	public double getProbabilityFromBetas() {
+		return probabilityFromBetas;
+	}
+
+	public void setProbabilityFromBetas(double probabilityFromBetas) {
+		this.probabilityFromBetas = probabilityFromBetas;
+	}
+
 }
