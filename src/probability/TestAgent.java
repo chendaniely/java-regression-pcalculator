@@ -1,5 +1,10 @@
 package probability;
 
+/**
+ * Example agent
+ * @author dchen
+ *
+ */
 public class TestAgent {
 
 	private int age = 24;
