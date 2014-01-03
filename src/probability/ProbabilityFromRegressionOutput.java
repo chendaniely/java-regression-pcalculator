@@ -10,27 +10,25 @@ import java.util.Hashtable;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * @author dchen
+ * 
+ * @param agent
+ *            object: when used in an agent-based model, this is the agent object
+ * @param variables
+ *            array: variables used in the stats output/program to be read from the csv file
+ * @param file
+ *            string: file directory of where parameter estimate table is
+ * @param rowStart
+ *            int: row where to start looking for parameter variables and beta estimates
+ * @param rowEnd
+ *            int: row where to stop looking for parameter variables and beta estimates
+ * @param colStart
+ *            int: column where variables are
+ * @param colEnd
+ *            int: column where to stop reading (where the parameter estimates are)
+ * @author dchen chendaniely
  * 
  */
 public class ProbabilityFromRegressionOutput {
-
-	/**
-	 * @param args
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws IOException {
-		// print current working directory
-		System.out.println(System.getProperty("user.dir"));
-		TestAgent ta = new TestAgent();
-		
-		// want to take this list and also convert it to the variables used for the agent class
-		String[] variables = {"agecat", "race4", "male", "inccat4", "educat3", "agecat*race4"};
-
-		ProbabilityFromRegressionOutput(ta, variables, "./src/alternativeVariableNames.csv","./src/SASRegressionExample.csv",
-				4, 122, 1, 5);
-
-	}
 
 	/**
 	 * 
@@ -38,6 +36,8 @@ public class ProbabilityFromRegressionOutput {
 	 *            object: when used in an agent-based model, this is the agent object
 	 * @param variables
 	 *            array: variables to be read from the csv file
+	 * @param alternativeName
+	 *            string: file directory of where alternative variable name csv is
 	 * @param file
 	 *            string: file directory of where parameter estimate table is
 	 * @param rowStart
@@ -49,21 +49,20 @@ public class ProbabilityFromRegressionOutput {
 	 * @param colEnd
 	 *            int: column where to stop reading (where the parameter estimates are)
 	 * @throws IOException
-	 * @author dchen chendaniely
 	 * 
 	 */
-	public static void ProbabilityFromRegressionOutput(TestAgent ta,
+	public ProbabilityFromRegressionOutput(Object agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
 		
 //		hardCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
-		genericCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
+		genericCodedLookups(agent, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
 		
 	}
 	/**
 	 * 
-	 * @param ta
+	 * @param agent
 	 * @param variables
 	 * @param alternativeName
 	 * @param file
@@ -73,7 +72,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @param colEnd
 	 * @throws IOException
 	 */
-	private static void genericCodedLookups (TestAgent ta,
+	private static void genericCodedLookups (Object agent,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
@@ -187,8 +186,8 @@ public class ProbabilityFromRegressionOutput {
 				String agentVariable2 = variableSynonym.get(interaction[1]).toString().trim();
 				System.out.println("interaction variable conversion: " + agentVariable1 + " " + agentVariable2);
 				
-				int categoricalInt1 = ta.getValue(agentVariable1);
-				int categoricalInt2 = ta.getValue(agentVariable2);
+				int categoricalInt1 = ((TestAgent) agent).getValue(agentVariable1);
+				int categoricalInt2 = ((TestAgent) agent).getValue(agentVariable2);
 				
 				String interactionString = interaction[0]+"*"+interaction[1]+Integer.toString(categoricalInt1)+Integer.toString(categoricalInt2);
 				System.out.println("catints:" + categoricalInt1 + categoricalInt2 + " " + 
@@ -213,7 +212,7 @@ public class ProbabilityFromRegressionOutput {
 				// categorical variable
 				// convert variable in stats output into variable used for agent
 				String agentVariable = variableSynonym.get(statsVariable).toString().trim();
-				int categoricalInt = ta.getValue(agentVariable);
+				int categoricalInt = ((TestAgent) agent).getValue(agentVariable);
 				String categoricalString = statsVariable+Integer.toString(categoricalInt);
 				
 
@@ -254,7 +253,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @deprecated Replaced by {@link #genericCodedLookups()
 	 */
 	@Deprecated
-	public static void hardCodedLookups (TestAgent ta,
+	private static void hardCodedLookups (TestAgent ta,
 			String[] variables, String alternativeName, String file,
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
