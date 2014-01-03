@@ -73,7 +73,7 @@ public class ProbabilityFromRegressionOutput {
 	 * @param rowEnd
 	 * @param colStart
 	 * @param colEnd
-	 * @return 
+	 * @return double
 	 * @throws IOException
 	 */
 	private double genericCodedLookups (Agent agent,
