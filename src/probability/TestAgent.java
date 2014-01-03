@@ -3,10 +3,10 @@ package probability;
 public class TestAgent {
 
 	private int age = 24;
-	private int ageCat = 1;
-	private int gender = 1;
-	private int race = 3;
-	private int marital = 1;
+	private int ageCat = 2;
+	private int gender = 0;
+	private int race = 2;
+	private int marital = 2;
 	private int income = 3;
 	private int edu = 2;
 
