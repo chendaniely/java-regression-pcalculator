@@ -23,7 +23,7 @@ public class TestAgent {
 			return getRace();
 		case "marital":
 			return getMarital();
-		case "education":
+		case "edu":
 			return getEdu();
 		case "income":
 			return getIncome();
