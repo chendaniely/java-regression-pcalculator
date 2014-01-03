@@ -1,5 +1,9 @@
 package probability;
-
+/**
+ * Stores the values read in from beta estimate CSV Files
+ * @author dchen
+ *
+ */
 public class StatsOutput {
 	
 	private String parameter = "";
