@@ -18,15 +18,14 @@ public class TestClass {
 	public static void main(String[] args) throws IOException {
 		// print current working directory
 		System.out.println(System.getProperty("user.dir"));
-		Object ta = new TestAgent();
+		Agent agent = new Agent();
 
 		// want to take this list and also convert it to the variables used for
 		// the agent class
 		// variables used in the stats output
-		String[] variables = { "agecat", "race4", "male", "inccat4", "educat3",
-				"agecat*race4" };
+		String[] variables = { "agecat", "race4", "male", "inccat4", "educat3", "agecat*race4" };
 
-		ProbabilityFromRegressionOutput p = new ProbabilityFromRegressionOutput(ta, variables,
+		ProbabilityFromRegressionOutput p = new ProbabilityFromRegressionOutput(agent, variables,
 				"./src/alternativeVariableNames.csv",
 				"./src/SASRegressionExample.csv", 4, 122, 1, 5);
 
