@@ -5,7 +5,7 @@ package probability;
  * @author dchen
  *
  */
-public class TestAgent {
+public class Agent {
 
 	private int age = 24;
 	private int ageCat = 2;
@@ -15,7 +15,7 @@ public class TestAgent {
 	private int income = 3;
 	private int edu = 2;
 
-	public int getValue(String parameter) {
+	public int getIntValue(String parameter) {
 
 		switch (parameter) {
 		case "age":
