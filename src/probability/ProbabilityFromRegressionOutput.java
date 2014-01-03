@@ -57,7 +57,7 @@ public class ProbabilityFromRegressionOutput {
 			int rowStart, int rowEnd, int colStart, int colEnd)
 			throws IOException {
 		
-		hardCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
+//		hardCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
 		genericCodedLookups(ta, variables, alternativeName, file, rowStart, rowEnd, colStart, colEnd);
 		
 	}
@@ -92,8 +92,7 @@ public class ProbabilityFromRegressionOutput {
 		// last row is the column of beta estimates
 		// puts data into hashtable
 		while ((nextLine = reader.readNext()) != null) {
-			// -2 is used so you can just use the line number in the file
-			// corrects for the csci indexing and first col variable names
+			// -2 is used so you can just use the line number in the file corrects for the csci indexing and first col variable names
 			if ((i > (rowStart - 2)) && (i < rowEnd)) {
 				// nextLine[] is an array of values from the line
 
@@ -169,15 +168,6 @@ public class ProbabilityFromRegressionOutput {
 //				System.out.println("~~~~~ ");
 
 			}
-			
-//			int race = ta.getRace();
-//			String racestring = "race4"+Integer.toString(race);
-//			if (hashtable.containsKey(racestring)) {
-//				value = ((StatsOutput) hashtable.get(racestring)).getEstimate();
-//				logitP += value;
-//				System.out.println("value: " + value);
-//				System.out.println(logitP);
-//			}
 
 			// interaction
 			// interaction is checked first otherwise the following line used
@@ -240,31 +230,8 @@ public class ProbabilityFromRegressionOutput {
 					logitP += value;
 					System.out.println("value: " + value);
 					System.out.println("current logitP value = " + logitP);
-				}
-				
-//				if (variableSynonym.containsKey(variable)) {
-//					System.out.println("input: stats variable = " + variable
-//							+ "; output: maps to agent variable = " + agentVariable);
-//					
-//					value = ((StatsOutput) hashtable.get("agecat")).getEstimate();
-//					System.out.println(value);
-//					
-//					logitP += value;
-//					System.out.println("value: " + value);
-//					System.out.println(logitP);
-//				}
-				
-				
-//				System.out.println("printing agent variable: " + agentVariable);
-//				if (statsVariable.contains("*")) {
-//					System.out.println("~~~~~ in the interaction variable if statment ~~~~~");
-//					String[] interaction = statsVariable.split("\\*");
-	//
-//					System.out.println(statsVariable + " is an interaction between "
-//							+ interaction[0] + " and " + interaction[1]);
-//				}
+				}				
 			}
-
 		}
 		
 		double probability = Math.exp(logitP)/(1 + Math.exp(logitP));
