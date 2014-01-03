@@ -2,6 +2,11 @@ package probability;
 
 import java.util.ArrayList;
 
+/**
+ * Stores the values read in from alternative variable name CSV File
+ * @author dchen
+ *
+ */
 public class VariableAlternativeNames {
 	
 	private String value = "";
