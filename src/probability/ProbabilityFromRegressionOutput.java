@@ -95,7 +95,7 @@ public class ProbabilityFromRegressionOutput {
 		// last row is the column of beta estimates
 		// puts data into hashtable
 		while ((nextLine = reader.readNext()) != null) {
-			// -2 is used so you can just use the line number in the file corrects for the csci indexing and first col variable names
+//			 -2 is used so you can just use the line number in the file corrects for the csci indexing and first col variable names
 			if ((i > (rowStart - 2)) && (i < rowEnd)) {
 				// nextLine[] is an array of values from the line
 
@@ -212,7 +212,6 @@ public class ProbabilityFromRegressionOutput {
 				}
 				
 			} else {
-				
 				// categorical variable
 				// convert variable in stats output into variable used for agent
 				String agentVariable = variableSynonym.get(statsVariable).toString().trim();
@@ -242,119 +241,10 @@ public class ProbabilityFromRegressionOutput {
 		System.out.println("logit = " + logitP);
 		System.out.println("probability = " + probability);
 		
+		reader.close();
 		return probability;
 	}
 	
-	/**
-	 * 
-	 * @param ta
-	 * @param variables
-	 * @param alternativeName
-	 * @param file
-	 * @param rowStart
-	 * @param rowEnd
-	 * @param colStart
-	 * @param colEnd
-	 * @throws IOException
-	 * @deprecated Replaced by {@link #genericCodedLookups()
-	 */
-	@Deprecated
-	private static void hardCodedLookups (Agent ta,
-			String[] variables, String alternativeName, String file,
-			int rowStart, int rowEnd, int colStart, int colEnd)
-			throws IOException {
-		
-		System.out.println("@@@@@ BEGIN HARD CODED LOOKUPS @@@@@");
-		/*
-		 * List of beta estimates, including b_0 (the intercept)
-		 */
-		CSVReader reader = new CSVReader(new FileReader(file));
-		Hashtable hashtable = new Hashtable();
-
-		String[] nextLine;
-		int i = 0;
-		// int start = 5;
-		// int end = 15;
-		// assumes first 3 rows are: the variable, categorical status 1, cat status 2
-		// last row is the column of beta estimates
-		// puts data into hashtable
-		while ((nextLine = reader.readNext()) != null) {
-			// -2 is used so you can just use the line number in the file
-			// corrects for the csci indexing and first col variable names
-			if ((i > (rowStart - 2)) && (i < rowEnd)) {
-				// nextLine[] is an array of values from the line
-
-//				String str = Arrays.toString(nextLine);
-//				System.out.println(str);
-//				System.out.println(nextLine[0]);
-
-				StatsOutput statsOutput = new StatsOutput();
-				statsOutput.setParameter(nextLine[0]);
-				if (nextLine[1].trim().length() > 0) {
-					statsOutput.setP1(Integer.parseInt(nextLine[1]));
-				}
-				if (nextLine[2].trim().length() > 0) {
-					statsOutput.setP2(Integer.parseInt(nextLine[2]));
-				}
-
-				statsOutput.setEstimate(Double.parseDouble(nextLine[4]));
-
-				hashtable.put(nextLine[0] + nextLine[1] + nextLine[2],
-						statsOutput);
-
-			}
-			i++;
-		}
-		
-		Double logitP = 0.0;
-		Double value = 0.0;
-		
-		if (hashtable.containsKey("Intercept")) {
-			value = ((StatsOutput) hashtable.get("Intercept")).getEstimate();
-			System.out.println(value);
-			logitP += value;
-			System.out.println("value: " + value);
-			System.out.println(logitP);
-			
-		}
-		
-		int age = ta.getAgeCat();
-		String agestring = "agecat"+Integer.toString(age);
-		System.out.println(agestring);
-		if (hashtable.containsKey(agestring)) {
-			value = ((StatsOutput) hashtable.get(agestring)).getEstimate();
-			System.out.println(value);
-			logitP += value;
-			System.out.println("value: " + value);
-			System.out.println(logitP);
-		}
-		
-		int race = ta.getRace();
-		String racestring = "race4"+Integer.toString(race);
-		if (hashtable.containsKey(racestring)) {
-			value = ((StatsOutput) hashtable.get(racestring)).getEstimate();
-			logitP += value;
-			System.out.println("value: " + value);
-			System.out.println(logitP);
-		}
-
-		String ageracestring = "agecat*race4"+Integer.toString(age)+Integer.toString(race);
-		if (hashtable.containsKey(ageracestring)) {
-			value = ((StatsOutput) hashtable.get(ageracestring)).getEstimate();
-			logitP += value;
-			System.out.println("value: " + value);
-			System.out.println(logitP);
-		}
-		double probability = Math.exp(logitP)/(1 + Math.exp(logitP));
-		
-		System.out.println("logit = " + logitP);
-		System.out.println("probability = " + probability);
-		
-		System.out.println("@@@@@ END HARD CODED LOOKUPS @@@@@");
-		
-		System.out.println("\n ---------- \n");
-	}
-
 	public double getProbabilityFromBetas() {
 		return probabilityFromBetas;
 	}
