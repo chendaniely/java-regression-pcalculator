@@ -1,10 +1,5 @@
 package probability;
 
-/**
- * Example agent
- * @author dchen
- *
- */
 public class Agent {
 
 	private int age = 24;
@@ -92,5 +87,4 @@ public class Agent {
 	public void setEdu(int edu) {
 		this.edu = edu;
 	}
-
 }
